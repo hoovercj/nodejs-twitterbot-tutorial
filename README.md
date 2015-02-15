@@ -1,3 +1,22 @@
+**Table of Contents**  *generated with [DocToc](http://doctoc.herokuapp.com/)*
+
+- [Introduction](#)
+- [Download and Install Node](#)
+- [Create package.json](#)
+- [Install Modules](#)
+- [Create Twitter App](#)
+- [Put Twitter variables into .env file](#)
+- [Create main.js](#)
+- [Drowning in Tweets](#)
+- [Storing data in redis](#)
+- [Replying to tweets](#)
+- [Setting up Heroku](#)
+	- [Installing and Creating App](#)
+	- [Configuring Heroku Add-Ons](#)
+	- [Adding Heroku Environment Variables](#)
+	- [Creating Procfile](#)
+	- [Deploying to Heroku](#)
+
 ## Introduction
 
 So you want to make a twitter bot. Maybe you want to annoy your friends, aggregate some information for analysis, or use this as an introduction to Node.js, Heroku, or Redis. Whatever your reason, you've come to the right place.
@@ -35,7 +54,7 @@ Many fields are self explanatory, but if you'd like more information you can loo
 
 ## Install Modules
 
-For this project, we will utilize the [`Twit`](https://github.com/ttezel/twit) module to connect to Twitter streaming API and send tweets and we will use the [`redis`](https://github.com/mranney/node_redis) module to store information in a Redis database. To install them, run the following commands:
+For this project, we will utilize the __[Twit](https://github.com/ttezel/twit)__ module to connect to Twitter streaming API and send tweets and we will use the __[redis](https://github.com/mranney/node_redis)__ module to store information in a Redis database. To install them, run the following commands:
 
 ```
 $ npm install twit --save
@@ -58,9 +77,9 @@ Open up `.gitignore` and add the following line:
 
 Now go to the Twitter [developer portal](http://apps.twitter.com/) and click 'create a new app'. It is strongly advised that you do this with a NEW twitter account so you don't accidentally get your main account blocked. For the URL and Callback URL you can place a personal website, or just the URL for your twitter account.
 
-After creating the app, go to the app details and select the _Permissions_ tab. You need to change the access level from *Read-only* to *Read and Write*. After saving that change, go to the _Keys and Access Tokens_ tab and click _Create my access token_.
+After creating the app, go to the app details and select the __Permissions__ tab. You need to change the access level from *Read-only* to *Read and Write*. After saving that change, go to the __Keys and Access Tokens__ tab and click __Create my access token__.
 
-Now you'll see an `Access Token` and `Access Token Secret` under _Your Access Token_, and up above under _Application Settings_ you'll see `Consumer Key (API Key)` and 'Consumer Secret (API Secret)'. We'll need those four values in our project, but they must be kept secret. To do that, we'll use environment variables.
+Now you'll see an *Access Token* and *Access Token Secret* under __Your Access Token__, and up above under __Application Settings__ you'll see *Consumer Key (API Key)* and *Consumer Secret (API Secret)*. We'll need those four values in our project, but they must be kept secret. To do that, we'll use environment variables.
 
 ## Put Twitter variables into `.env` file
 
@@ -127,7 +146,7 @@ The only tricky part is `process.env.TWITTER_CONSUMER_KEY` which accesses the en
 
 ## Drowning in Tweets
 
-The command `node main.js` would run the code we just wrote, but would give an error that `config must provide consumer_key`. The node command only runs the code exactly as it is written. To make sure that the environment variables are available to our program we can use something called `Foreman`. Execute the following command:
+The command `node main.js` would run the code we just wrote, but would give an error that `config must provide consumer_key`. The node command only runs the code exactly as it is written. To make sure that the environment variables are available to our program we can use something called [Foreman](https://www.npmjs.com/package/foreman). Execute the following command:
 
 `$ npm install -g foreman`
 
@@ -135,7 +154,7 @@ Foreman reads `.env` files and makes the variables avialable to node processes. 
 
 `$ nf run node main.js`
 
-If you kept the search term as _fun_ you should see a steady stream of values scrolling through the console.
+If you kept the search term as __fun__ you should see a steady stream of values scrolling through the console.
 
 ## Storing data in redis
 
@@ -181,14 +200,16 @@ Look [here](http://redis.io/commands) to learn more about redis commands and [he
 
 The following code will take a tweet object and a message and send a reply to the author of the provided tweet. Uncomment the call to this function in the processTweet function above to send greetings to users.
 
-'''
+```
 function replyTo(tweet, message) {
 	var text = '@' + tweet.user.screen_name + ' ' + message;
-	T.post('statuses/update', { status: text, in_reply_to_status_id: tweet.user.id_str }, function(err, data, response) {
+	T.post('statuses/update', { status: text, in_reply_to_status_id: tweet.user.id_str }, 
+	    function(err, data, response) {
 		console.log(data)
-	});
+	    }
+	);
 }
-'''
+```
 
 Go ahead and test that this works, possibly by changing your search term to something that nobody should be tweeting and then tweeting it. Make the search term your username or a random sequence of characters. When you know it runs locally, then you can move on to deploy it to the cloud.
 
@@ -215,7 +236,7 @@ $ heroku addons:add papertrail
 
 ### Adding Heroku Environment Variables
 
-Since we are not uploading our `.env` file, we need to tell Heroku what our environment variables are. They can be added in the _settings_ tab of the application in the heroku dashboard, or by the command line using the command:
+Since we are not uploading our `.env` file, we need to tell Heroku what our environment variables are. They can be added in the __settings__ tab of the application in the heroku dashboard, or by the command line using the command:
 
 `$ heroku config:set VARIABLE_NAME=VALUE`
 
@@ -252,8 +273,8 @@ Now add and commit all of the files and push to heroku with the command:
 
 `$ git push heroku master`
 
-Your app is now on Heroku. It isn't running yet, though. Go to the heroku dashboard for your app and view the _resources_ tab. Under the _dynos_ section there should be an entry for _main_. Click _edit_ and change the number of 1X dynos from 0 to 1 and click save.
+Your app is now on Heroku. It isn't running yet, though. Go to the heroku dashboard for your app and view the __resources__ tab. Under the __dynos__ section there should be an entry for __main__. Click __edit__ and change the number of 1X dynos from 0 to 1 and click save.
 
-Then click _papertrail_ from the _addons_ section below to open the logs. You should see logs showing the app being scaled, starting, and finally having the state changed to 'up'. Below that a stream of tweets and logs should be coming through if everything is working.
+Then click __papertrail__ from the __addons__ section below to open the logs. You should see logs showing the app being scaled, starting, and finally having the state changed to 'up'. Below that a stream of tweets and logs should be coming through if everything is working.
 
 Congratulations, you did it!
