@@ -1,7 +1,7 @@
 **Table of Contents**  *generated with [DocToc](http://doctoc.herokuapp.com/)*
 
-- [Introduction](#)
-- [Download and Install Node](#)
+- [Introduction](#introduction)
+- [Download and Install Node](#download-and-install-node)
 - [Create package.json](#)
 - [Install Modules](#)
 - [Create Twitter App](#)
