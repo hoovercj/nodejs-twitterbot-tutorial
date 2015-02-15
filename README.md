@@ -1,7 +1,7 @@
 **Table of Contents**  *generated with [DocToc](http://doctoc.herokuapp.com/)*
 
 - [Introduction](#introduction)
-- [Setting up node)(#setting-up-node)
+- [Setting up node](#setting-up-node)
 	- [Download and Install Node](#download-and-install-node)
 	- [Create package.json](#create-packagejson)
 	- [Install Modules](#install-modules)
