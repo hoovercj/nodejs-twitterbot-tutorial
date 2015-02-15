@@ -25,11 +25,13 @@ Node.js is a platform for writing server side applications in javascript. These 
 
 Create a project folder, `$ git init`, and lets go!
 
-## Download and Install Node
+## Setting up Node
+
+### Download and Install Node
 
 To get started, download and install [Node.js](http://nodejs.org/download/) and ensure that it is installed properly by running `$ node --version` from your console. This will allow you to run node applications and install node modules. The important commands will be explained along the way.
 
-## Create `package.json`
+### Create `package.json`
 
 The first file you need in a node application is the `package.json` file. You can create it through a wizard by running `$ npm init` in the root of your project, or you can copy this one: 
 
@@ -52,7 +54,7 @@ The first file you need in a node application is the `package.json` file. You ca
 ```
 Many fields are self explanatory, but if you'd like more information you can look [here](http://browsenpm.org/package.json).
 
-## Install Modules
+### Install Modules
 
 For this project, we will utilize the __[Twit](https://github.com/ttezel/twit)__ module to connect to Twitter streaming API and send tweets and we will use the __[redis](https://github.com/mranney/node_redis)__ module to store information in a Redis database. To install them, run the following commands:
 
@@ -97,7 +99,9 @@ Going through the trouble of hiding our secrets in `.env` doesn't do us any good
 
 `*.env`
 
-## Create `main.js`
+## Building the app
+
+### Create `main.js`
 
 Now let's start looking at tweets. Create a file called `main.js`.
 
@@ -144,7 +148,7 @@ It's very straightforward -- initialize a Twit object with the fields we need to
 
 The only tricky part is `process.env.TWITTER_CONSUMER_KEY` which accesses the environment variable that we put in `.env` with the name TWITTER_CONSUMER_KEY.
 
-## Drowning in Tweets
+### Drowning in Tweets
 
 The command `node main.js` would run the code we just wrote, but would give an error that `config must provide consumer_key`. The node command only runs the code exactly as it is written. To make sure that the environment variables are available to our program we can use something called [Foreman](https://www.npmjs.com/package/foreman). Execute the following command:
 
@@ -156,7 +160,7 @@ Foreman reads `.env` files and makes the variables avialable to node processes. 
 
 If you kept the search term as __fun__ you should see a steady stream of values scrolling through the console.
 
-## Storing data in redis
+### Storing data in redis
 
 Make sure you have redis installed and running. Instructions for that can be found [here](http://redis.io/download). If you have problems getting redis to run locally, consider moving your development to a cloud development platform such as [Cloud9](https://c9.io).
 
@@ -196,7 +200,7 @@ This function utilizes the redis command `sadd` to attempt to add the user_id to
 
 Look [here](http://redis.io/commands) to learn more about redis commands and [here](http://redis.io/topics/data-types) to learn more about redis data types.
 
-## Replying to tweets
+### Replying to tweets
 
 The following code will take a tweet object and a message and send a reply to the author of the provided tweet. Uncomment the call to this function in the processTweet function above to send greetings to users.
 
