@@ -1,6 +1,7 @@
 # Node.js Twitter Bot Tutorial
 
-## Table of Contents  *generated with [DocToc](http://doctoc.herokuapp.com/)*
+## Table of Contents 
+#####*generated with [DocToc](http://doctoc.herokuapp.com/)*
 
 - [Introduction](#introduction)
 - [Setting up node](#setting-up-node)
