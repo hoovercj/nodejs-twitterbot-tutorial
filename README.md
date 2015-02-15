@@ -2,11 +2,11 @@
 
 - [Introduction](#introduction)
 - [Download and Install Node](#download-and-install-node)
-- [Create package.json](#create-package-json)
+- [Create package.json](#create-packagejson)
 - [Install Modules](#install-modules)
 - [Create Twitter App](#create-twitter-app)
 - [Put Twitter variables into .env file](#put-twitter-variables-into-env-file)
-- [Create main.js](#create-main-js)
+- [Create main.js](#create-mainjs)
 - [Drowning in Tweets](#drowning-in-tweets)
 - [Storing data in redis](#storing-data-in-redis)
 - [Replying to tweets](#replying-to-tweets)
