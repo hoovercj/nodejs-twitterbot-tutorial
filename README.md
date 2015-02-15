@@ -1,18 +1,16 @@
-# Introduction
+## Introduction
 
 So you want to make a twitter bot. Maybe you want to annoy your friends, aggregate some information for analysis, or use this as an introduction to Node.js, Heroku, or Redis. Whatever your reason, you've come to the right place.
 
 Node.js is a platform for writing server side applications in javascript. These applications can be web servers that handle requests, serve webpages, and/or perform work. In our case, we just need it to do work. When it starts up it will connect to a Redis database, connect to the Twitter Streaming API, and post tweets using the Twitter REST Api.
 
-So make a folder, `git init`, and lets go!
-
-# Set-Up Node and your Project
+Create a project folder, `$ git init`, and lets go!
 
 ## Download and Install Node
 
 To get started, download and install [Node.js](http://nodejs.org/download/) and ensure that it is installed properly by running `$ node --version` from your console. This will allow you to run node applications and install node modules. The important commands will be explained along the way.
 
-## Initialize `package.json`
+## Create `package.json`
 
 The first file you need in a node application is the `package.json` file. You can create it through a wizard by running `$ npm init` in the root of your project, or you can copy this one: 
 
@@ -101,7 +99,7 @@ var T = new Twit({
     access_token_secret: process.env.TWITTER_ACCESS_SECRET
 });
 
-var stream = T.stream('statuses/filter', { track: 'search term' });
+var stream = T.stream('statuses/filter', { track: 'fun' });
 
 stream.on('tweet', function (tweet) {
     console.log(tweet.text);
