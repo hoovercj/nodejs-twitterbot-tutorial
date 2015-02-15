@@ -52,6 +52,10 @@ You should now see a `node_modules` folder in your directory, and `package.json`
   }
 ```
 
+Open up `.gitignore` and add the following line: 
+
+`node_modules/*`
+
 ## Create Twitter App
 
 Now go to the Twitter [developer portal](http://apps.twitter.com/) and click 'create a new app'. It is strongly advised that you do this with a NEW twitter account so you don't accidentally get your main account blocked. For the URL and Callback URL you can place a personal website, or just the URL for your twitter account.
@@ -137,7 +141,7 @@ If you kept the search term as _fun_ you should see a steady stream of values sc
 
 ## Storing data in redis
 
-Make sure you have redis installed and running. Instructions for that can be found [here](http://redis.io/download).
+Make sure you have redis installed and running. Instructions for that can be found [here](http://redis.io/download). If you have problems getting redis to run locally, consider moving your development to a cloud development platform such as [Cloud9](https://c9.io).
 
 In `main.js` after initializing the Twit object (before the stream methods) add the following code:
 
@@ -188,16 +192,70 @@ function replyTo(tweet, message) {
 }
 '''
 
-## Deploying to Heroku
+Go ahead and test that this works, possibly by changing your search term to something that nobody should be tweeting and then tweeting it. Make the search term your username or a random sequence of characters. When you know it runs locally, then you can move on to deploy it to the cloud.
+
+## Setting up Heroku
+
+### Installing and Creating App
 
 Now you have everything you need to run a local twitter bot to monitor a search term and reply to users. Let's get it up into the cloud, though, so it will run forever without interruption.
 
-* `$ npm install [-g] [module] [--save]` -- The `npm install` command will allow you to install modules from [npm](https://www.npmjs.com/), or node package manager. There you will find modules to help with almost anything: making http requests, accessing twitter or API's, database plugins, etc. Some npm packages are meant to be used in your application. Node modules are automatically installed into the `node_modules` folder.
+If you don't have the heroku toolbelt installed, do that from [here](https://toolbelt.heroku.com/). Install it, create an account, and login from the console using the command `$ heroku login`.
 
-`$ npm install` will look in the current directory for a `package.json` file and install all modules listed as a dependency. For more information about the parts of `package.json` files, look [here](http://browsenpm.org/package.json).
+You are now ready to create the heroku app with the command:
 
-`$ npm install twit --save` from your app directory would speak to npm and fetch the `twit` module for accessing the twitter API and store it in `node_modules`. This could then be referenced in your application files with a `require` statement which will be explained later. The `--save` argument will automatically add the module as a dependency in `package.json`
+`$ heroku create [app-name]` where `[app-name]` should be replaced with a unique name of your choice. You can leave that part out and heroku will automatically assign your app a name.
 
-`$ npm install -g foreman` would fetch the `foreman` module and install it globally so that it can be used from the command line. This module will _not_ be in the `node_modules` folder.
+### Configuring Heroku Add-Ons
 
-Adding `--save` to the end of the command will add the dependency to your project and ensure that it 
+The app is created, but the free [Redis Cloud add-on](https://addons.heroku.com/rediscloud) needs to be added. We'll also add the free [Papertrail logging add-on](https://addons.heroku.com/papertrail) to make it easy to view and search our heroku logs. Execute the following commands:
+
+```
+$ heroku addons:add rediscloud
+$ heroku addons:add papertrail
+```
+
+### Adding Heroku Environment Variables
+
+Since we are not uploading our `.env` file, we need to tell Heroku what our environment variables are. They can be added in the _settings_ tab of the application in the heroku dashboard, or by the command line using the command:
+
+`$ heroku config:set VARIABLE_NAME=VALUE`
+
+Add the five twitter variables to the heroku configuration. You'll remember that REDISCLOUD_URL is also an environment variable that our code references. We don't need to add that manually, though. It was automatically added to heroku when we added the add-on. You can view it and all of the environment variables with the command `$ heroku config`
+
+### Creating Procfile
+
+The last step before deploying is to set up a special file to tell Heroku how to run our application when new code is deployed. This is done with a `Procfile`. More information can be found [here](https://devcenter.heroku.com/articles/procfile), but basically `Procfile` lists types of processes that can be run by `foreman` on heroku servers. Ours should look like this:
+
+`main: node main.js`
+
+This defines a type of process called `main` that should be started with the command `node main.js` which will launch our app. Instead of `main`, we could have called it almost anything. That's because the name has no meaning except for one special type of process called `web` that is reserved in Heroku. It should be used to launch server processes. More information about that can be found in the procfile article linked above.
+
+Earlier we started our app with the command `$ nf run node main.js`. Now we can use the following instead:
+
+`$ nf start main`
+
+Make sure this works before moving on.
+
+### Deploying to Heroku
+
+The twitter bot runs locally and we've configured heroku. Check your git status. It should contain exactly the following:
+
+```
+.gitignore
+Procfile
+main.js
+package.json
+```
+
+If `node_modules` or `.env` are listed, add them to your `.gitignore` as instructed above and check again.
+
+Now add and commit all of the files and push to heroku with the command:
+
+`$ git push heroku master`
+
+Your app is now on Heroku. It isn't running yet, though. Go to the heroku dashboard for your app and view the _resources_ tab. Under the _dynos_ section there should be an entry for _main_. Click _edit_ and change the number of 1X dynos from 0 to 1 and click save.
+
+Then click _papertrail_ from the _addons_ section below to open the logs. You should see logs showing the app being scaled, starting, and finally having the state changed to 'up'. Below that a stream of tweets and logs should be coming through if everything is working.
+
+Congratulations, you did it!
